@@ -2,7 +2,7 @@
   "name": "unloader-oxc",
   "version": "0.0.0",
   "packageManager": "pnpm@10.2.0",
-  "description": "undefined",
+  "description": "Oxc integration for unloader",
   "type": "module",
   "license": "MIT",
   "homepage": "https://github.com/sxzz/unloader-oxc#readme",

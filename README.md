@@ -2,10 +2,34 @@
 
 [![Unit Test](https://github.com/sxzz/unloader-oxc/actions/workflows/unit-test.yml/badge.svg)](https://github.com/sxzz/unloader-oxc/actions/workflows/unit-test.yml)
 
+[Oxc](https://oxc.rs/) integration for [unloader](https://github.com/sxzz/unloader).
+
 ## Install
 
 ```bash
 npm i unloader-oxc
+```
+
+## Usage
+
+```ts
+// unloader.config.ts
+import { defineConfig } from 'unloader'
+import { Oxc } from 'unloader-oxc'
+
+export default defineConfig({
+  plugins: [
+    Oxc({
+      transform: {
+        // target: 'es2015',
+        // ...
+      },
+      resolve: {
+        // ...
+      },
+    }),
+  ],
+})
 ```
 
 ## Sponsors
