@@ -32,6 +32,12 @@ export default defineConfig({
 })
 ```
 
+### CLI
+
+```bash
+node --import unloader/register ...
+```
+
 ## Sponsors
 
 <p align="center">
