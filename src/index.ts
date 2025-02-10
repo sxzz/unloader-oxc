@@ -9,28 +9,33 @@ import type { Plugin } from 'unloader'
 export interface Options {
   include?: FilterPattern
   exclude?: FilterPattern
-  transform?: TransformOptions
+  transform?: Omit<TransformOptions, 'sourcemap'>
   resolve?: NapiResolveOptions
+  sourcemap?: boolean
 }
 
 export type OptionsResolved = Required<Options>
 
-export function resolveOptions(options?: Options): OptionsResolved {
+export function resolveOptions(options: Options): OptionsResolved {
   return {
-    include: options?.include || [/\.[cm]?tsx?$/],
-    exclude: options?.exclude || [],
-    transform: options?.transform || {},
-    resolve: options?.resolve || {},
+    include: options.include || [/\.[cm]?tsx?$/],
+    exclude: options.exclude || [],
+    transform: options.transform || {},
+    resolve: options.resolve || {},
+    sourcemap: options.sourcemap ?? true,
   }
 }
 
-export function Oxc(userOptions?: Options): Plugin {
+export function Oxc(userOptions: Options = {}): Plugin {
   const options = resolveOptions(userOptions)
   const filter = createFilter(options.include, options.exclude)
 
   return {
     name: 'oxc',
 
+    options(config) {
+      config.sourcemap ||= options.sourcemap
+    },
     async resolveId(source, importer, { conditions }) {
       if (!importer) return
       const resolver = new ResolverFactory({
@@ -60,13 +65,16 @@ export function Oxc(userOptions?: Options): Plugin {
       const filepath = fileURLToPath(id)
       const contents = await readFile(filepath, 'utf8')
 
-      const result = transform(filepath, contents, options.transform)
+      const result = transform(filepath, contents, {
+        sourcemap: options.sourcemap,
+        ...options.transform,
+      })
       if (result.errors.length)
         throw new SyntaxError(
           result.errors.map((error) => error.message).join('\n'),
         )
 
-      return { code: result.code, format: format || 'module' }
+      return { code: result.code, map: result.map, format: format || 'module' }
     },
   }
 }
