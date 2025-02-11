@@ -4,6 +4,10 @@
 
 [Oxc](https://oxc.rs/) integration for [unloader](https://github.com/sxzz/unloader).
 
+> [!CAUTION]
+> This project is initially created for proof of concept, and it's deprecated now.
+> Please use [unplugin-oxc](https://github.com/unplugin/unplugin-oxc) instead.
+
 ## Install
 
 ```bash
